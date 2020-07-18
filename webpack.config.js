@@ -2,9 +2,12 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 module.exports = {
-    entry: './src/index.js',
+    entry: {
+        index: './src/index.js'
+    },
     output: {
-        path: path.resolve('./runnables')
+        path: path.resolve('./runnables'),
+        filename: '[name].js'
     },
     module: {
     rules: [
