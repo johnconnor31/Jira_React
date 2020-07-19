@@ -23,5 +23,9 @@ module.exports = {
             template: './public/template.html',
             filename: 'index.html'
         })
-    ]
+    ],
+    devServer: {
+        open: 'Firefox',
+        compress: true
+    }
 }
