@@ -51,9 +51,12 @@ function ChipWithTextBox(props) {
                                                         ref={textRef}
                                                         id='innerSearch'
                                                         className={styles.innerTextField}
+                                                        InputProps={{
+                                                            ...params.InputProps,
+                                                            disableUnderline:true
+                                                        }}
                                                         fullWidth
                                                         autoFocus
-                                                        variant='outlined'
                                                         />
                                         }
                             />;
