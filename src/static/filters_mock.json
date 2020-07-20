@@ -1,0 +1,27 @@
+[
+    { "name":"Assignee", "opts": [
+        "Sairam Singireesu",
+        "ramya Maredi",
+        "Elon Musk",
+        "Jeff Bezos"
+        ]
+    },
+    { "name": "reporter", 
+      "opts": [
+        "Sairam Singireesu",
+        "ramya Maredi",
+        "Elon Musk",
+        "Jeff Bezos"
+        ]
+    },
+    { "name": "status",
+        "opts": [
+        "Open",
+        "In Progress",
+        "In Code Review",
+        "Resolved",
+        "Verified",
+        "Closed"
+        ]
+    }
+]
