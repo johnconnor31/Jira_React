@@ -23,5 +23,11 @@
         "Verified",
         "Closed"
         ]
+    },
+    { "name": "Updated Date", 
+           "type": "Date"
+    },
+    { "name": "createdDate",
+        "type": "Date"
     }
 ]

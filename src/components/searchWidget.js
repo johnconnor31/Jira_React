@@ -1,6 +1,8 @@
 import React from 'react';
-import { TextField, Input } from '@material-ui/core';
+import { TextField } from '@material-ui/core';
+import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import { Autocomplete } from '@material-ui/lab';
+import DateFnsUtils from '@date-io/date-fns';
 import { makeStyles } from '@material-ui/styles';
 import options from '../static/filters_mock.json';
 
@@ -16,7 +18,11 @@ const useStyles = makeStyles(theme => ({
 export default function SearchWidget() {
     const styles = useStyles();
     const [selectedOptions, setSelectedOptions] = React.useState([options[0]]);
-    const [selectedSubOptions, setSelectedSubOptions] = React.useState([]);
+    const [subOptions, setSubOptions] = React.useState([]);
+    const cloneSubOptions = values => {
+        const subOptCopy = Object.assign([],values);
+        setSubOptions(subOptCopy);
+    }
     function onChangeValues(e, values){
         setSelectedOptions(values);
     }
@@ -35,6 +41,8 @@ export default function SearchWidget() {
         }}
         ChipProps= {{
             selectedOptions,
+            subOptions,
+            cloneSubOptions,
             variant:'outlined',
             component: ChipWithTextBox
         }} />
@@ -42,21 +50,42 @@ export default function SearchWidget() {
 }
 
 function ChipWithTextBox(props) {
-    const optionsList = props.selectedOptions[props['data-tag-index']].opts;
+    const selectedOption = props.selectedOptions[props['data-tag-index']];
+    const { subOptions, cloneSubOptions } = props;
+    const type = selectedOption.type;
+    const name = selectedOption.name;
+    const optionsList = selectedOption.opts;
     const styles = useStyles();
     const textRef = React.useRef();
-    console.log('chip props', props);
     function onTextClick(e) {
         console.log('stopping propagation');
         e.stopPropagation();
         e.preventDefault();
         textRef.current.focus();
     }
-    const selectOptions = <Autocomplete
-    id='cardSearch'
+    const currentValID = subOptions.findIndex(val => val.name === name);
+    console.log('chip props',subOptions);
+    const changeValues = name => (event,values) => {
+        // console.log('on change', values, subOptions, name);
+        if(currentValID!==-1){
+            subOptions.splice(currentValID,1, {
+                name,
+                values: typeof event.getMonth === 'function' ? event : values
+            });
+        } else {
+            subOptions.push({
+                name,
+                values: typeof event.getMonth === 'function' ? event : values
+            });
+        }
+        cloneSubOptions(subOptions);
+    } 
+    const selectOptions = !type ? <Autocomplete
+                            id='cardSearch'
                             multiple
                             filterSelectedOptions
                             options = {optionsList}
+                            onChange={changeValues(selectedOption.name)}
                             renderInput = {params => <TextField
                                                         {...params}
                                                         ref={textRef}
@@ -70,7 +99,26 @@ function ChipWithTextBox(props) {
                                                         autoFocus
                                                         />
                                         }
-                            />;
+                            />
+                            : <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                <KeyboardDatePicker
+                                    variant='inline'
+                                    autoOk
+                                    format="MM/dd/yyyy"
+                                    animateYearScrolling
+                                    value={currentValID===-1 ? new Date() : subOptions[currentValID].values}
+                                    onChange={changeValues(selectedOption.name)}
+                                    InputAdornmentProps={{
+                                        position:'start'
+                                    }}
+                                    InputProps={{
+                                        disableUnderline:true
+                                    }}
+                                    KeyboardButtonProps={{
+                                        color:'primary'
+                                    }}
+                                    />
+                            </MuiPickersUtilsProvider>;
     const childs = Object.assign([],[props.children[0],props.children[1],':',selectOptions,props.children[2]]);
 
     return (
