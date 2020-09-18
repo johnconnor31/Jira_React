@@ -15,10 +15,10 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-export default function SearchWidget() {
+export default function SearchWidget(props) {
     const styles = useStyles();
     const [selectedOptions, setSelectedOptions] = React.useState([options[0]]);
-    const [subOptions, setSubOptions] = React.useState([]);
+    const { subOptions, setSubOptions } = props;
     const cloneSubOptions = values => {
         const subOptCopy = Object.assign([],values);
         setSubOptions(subOptCopy);

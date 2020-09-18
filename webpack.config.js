@@ -7,7 +7,7 @@ module.exports = {
     },
     output: {
         path: path.resolve('./runnables'),
-        filename: '[name].js'
+        filename: '[name][id].js'
     },
     module: {
     rules: [
@@ -26,6 +26,7 @@ module.exports = {
     ],
     devServer: {
         open: 'Firefox',
-        compress: true
+        compress: true,
+        port: 5000
     }
 }

@@ -1,36 +1,35 @@
 import React from 'react';
-import MenuIcon from '@material-ui/icons/Menu';
-import { makeStyles } from '@material-ui/core/styles';
-import { AppBar, Toolbar, Button, IconButton,Typography } from '@material-ui/core';
+import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import { Paper } from '@material-ui/core';
+import Header from './Header';
 import SearchWidget from './SearchWidget';
+import TicketList from './TicketList';
 
-const useStyles = makeStyles(theme =>({
-    root: {
-        flexGrow: 1,
-    },
-    menuButton: {
-        marginRight: theme.spacing(2),
-    },
-    title: {
-        flexGrow: 1,
-    }
-}));
 export default function App() {
-    const styles = useStyles();
+    const [mode, setMode] = React.useState('light');
+    const [subOptions, setSubOptions] = React.useState([]);
+    function switchMode(){
+        if(mode==='light') {
+            setMode('dark');
+        } else {
+            setMode('light');
+        }
+    }
+    const theme = createMuiTheme({
+        palette:{
+            primary: {
+                main: mode ==='dark' ? '#002f' : '#f44336'
+              },
+            type:mode
+        }
+    });
         return(
-            <>
-            <AppBar position='static' className={styles.root}>
-                <Toolbar>
-                    <IconButton className={styles.menuButton} edge='start'>
-                        <MenuIcon />
-                    </IconButton>
-                    <Typography className={styles.title} variant='h6'>
-                        Jira Dashboard
-                    </Typography>
-                    <Button color='inherit'>Login</Button>
-                </Toolbar>
-            </AppBar>
-            <SearchWidget />
-            </>
+            <ThemeProvider theme={theme}>
+            <Paper variant='outlined'>
+                <Header switchMode={switchMode} />
+                <SearchWidget subOptions={subOptions} setSubOptions={setSubOptions} />
+            </Paper>
+            <TicketList subOptions={subOptions} />
+            </ThemeProvider>
         );
 };
