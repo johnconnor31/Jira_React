@@ -81,7 +81,7 @@ function ChipWithTextBox(props) {
         cloneSubOptions(subOptions);
     } 
     const selectOptions = !type ? <Autocomplete
-                            id='cardSearch'
+                            id={`cardSearch${props.children[1]}`}
                             multiple
                             filterSelectedOptions
                             options = {optionsList}
