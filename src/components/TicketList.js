@@ -10,8 +10,7 @@ import CloseIcon from '@material-ui/icons/Close';
 const useStyles = makeStyles(theme =>({
     root: {
         margin: '50px 0 0 0',
-        backgroundColor: '#f5f5f5',
-        padding: '10px'
+        backgroundColor: '#f5f5f5'
     },
     summaryHeader: {
         margin: '0 50px 0 0'

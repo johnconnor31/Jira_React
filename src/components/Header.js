@@ -32,7 +32,7 @@ export default function Header(props) {
                     <Typography className={styles.title} variant='h6'>
                         Jira Dashboard
                     </Typography>
-                    <Switch onChange={switchMode} color={switchMode==='dark' ? 'default' : '' } />
+                    <Switch onChange={switchMode} />
                     <Button color='inherit'>Login</Button>
                 </Toolbar>
             </AppBar>
