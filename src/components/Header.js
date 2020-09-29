@@ -20,13 +20,13 @@ const useStyles = makeStyles((theme) =>({
 }));
 
 export default function Header(props) {
-    const switchMode = props.switchMode;
+    const { switchMode, toggleDrawer } = props;
 
     const styles = useStyles();
     return (
         <AppBar position='static'>
                 <Toolbar>
-                    <IconButton className={styles.menuButton} edge='start'>
+                    <IconButton className={styles.menuButton} edge='start' onClick={toggleDrawer}>
                         <MenuIcon />
                     </IconButton>
                     <Typography className={styles.title} variant='h6'>
