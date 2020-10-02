@@ -9,9 +9,9 @@ import TicketList from './TicketList';
 const drawerWidth = '240';
 const useStyles = makeStyles(theme => ({
     paperStyle: {
-        minHeight:'98.2vh', 
-        width: props => props.openDrawer &&  `calc(100%-${drawerWidth}px)`,
-        marginLeft: props => props.openDrawer && `${drawerWidth-10}px`,
+        minHeight:'98.2vh',
+        width: props => props.openDrawer ?  `calc(100%-${drawerWidth}px)` : `calc(100%)px` ,
+        marginLeft: props => props.openDrawer ? `${drawerWidth-5}px` : '65px',
         transition: props => theme.transitions.create(['width','margin'], {
             easing: theme.transitions.easing.sharp,
             duration: props.openDrawer ? theme.transitions.duration.enteringScreen : theme.transitions.duration.leavingScreen
@@ -47,7 +47,7 @@ export default function App() {
     });
         return(
             <ThemeProvider theme={theme}>
-            <LeftSideMenu open={openDrawer} drawerWidth={drawerWidth} />
+            <LeftSideMenu open={openDrawer} toggleDrawer={toggleDrawer} drawerWidth={drawerWidth} />
             <Paper variant='outlined' className={classes.paperStyle}>
                 <Header switchMode={switchMode} toggleDrawer={toggleDrawer} drawerWidth={drawerWidth} />
                 <SearchWidget subOptions={subOptions} setSubOptions={setSubOptions} />
