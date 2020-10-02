@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) =>({
 }));
 
 export default function Header(props) {
-    const { switchMode, toggleDrawer } = props;
+    const { switchMode, toggleDrawer, toggleLogin } = props;
 
     const styles = useStyles();
     return (
@@ -33,7 +33,7 @@ export default function Header(props) {
                         Jira Dashboard
                     </Typography>
                     <Switch onChange={switchMode} />
-                    <Button color='inherit'>Login</Button>
+                    <Button color='inherit' onClick={toggleLogin(true)}>Login</Button>
                 </Toolbar>
             </AppBar>
     );
