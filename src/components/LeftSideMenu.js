@@ -1,5 +1,5 @@
 import React from 'react';
-import { Drawer, List, ListItem, ListItemIcon, ListItemText, Typography, Divider, IconButton } from '@material-ui/core';
+import { Drawer, List, ListItem, ListItemIcon, ListItemText, Typography, Divider } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import { LockOpen, AssignmentInd, List as AllList, Link } from '@material-ui/icons';
 
@@ -12,6 +12,7 @@ const useStyles = makeStyles(theme => ({
         })
     },
     drawerClose: {
+        overflowX: 'hidden',
         width: '70px',
         transition: theme.transitions.create(['width','margin'], {
             easing: theme.transitions.easing.sharp,
@@ -19,13 +20,10 @@ const useStyles = makeStyles(theme => ({
         })
     },
     drawerList: {
-        '&$hover': {
-            background:'gray'
-        },
         marginLeft: '8px'
     },
     drawerHead : {
-        height: '11%', 
+        height: '7.5%', 
         display: 'flex', 
         justifyContent:'center', 
         alignItems: 'center'
@@ -38,7 +36,7 @@ export default function drawer(props) {
     const menuOptions = ['Open Issues', 'Assigned to Me', 'All Issues'];
     return (
         <Drawer open={open} variant='permanent' classes={{paper: open ? classes.drawerOpen : classes.drawerClose}}>
-            <Typography onClick={props.toggleDrawer} className={classes.drawerHead}>{open ? 'Quick Links' : <Link />}</Typography>
+            <Typography onClick={toggleDrawer} className={classes.drawerHead}>{open ? 'Quick Links' : <Link />}</Typography>
             <Divider />
             <List>
                 {
