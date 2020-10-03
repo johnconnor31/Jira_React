@@ -6,7 +6,6 @@ import { Facebook, Twitter, Reddit } from '@material-ui/icons';
 const useStyles = makeStyles({
     paper: {
         width: '40%',
-        height: '60%',
         display:'flex',
         alignItems:'center'
     },
