@@ -5,7 +5,6 @@ import Header from './Header';
 import LeftSideMenu from './LeftSideMenu';
 import SearchWidget from './SearchWidget';
 import TicketList from './TicketList';
-import LoginDialog from './loginDialog';
 
 const drawerWidth = '240';
 const useStyles = makeStyles(theme => ({
@@ -21,16 +20,12 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function App() {
-    const [openLogin, setOpenLogin] = React.useState(false);
     const [openDrawer, setOpenDrawer] = React.useState(false);
     const [mode, setMode] = React.useState('light');
     const [subOptions, setSubOptions] = React.useState([]);
     const classes = useStyles({openDrawer});
     function toggleDrawer() {
         openDrawer ? setOpenDrawer(false): setOpenDrawer(true);
-    }
-    function toggleLogin(open) {
-     return () => setOpenLogin(open);
     }
     function switchMode(){
         if(mode==='light') {
@@ -54,11 +49,10 @@ export default function App() {
             <ThemeProvider theme={theme}>
             <LeftSideMenu open={openDrawer} toggleDrawer={toggleDrawer} drawerWidth={drawerWidth} />
             <Paper variant='outlined' className={classes.paperStyle}>
-                <Header switchMode={switchMode} toggleDrawer={toggleDrawer} drawerWidth={drawerWidth} toggleLogin={toggleLogin} />
+                <Header switchMode={switchMode} toggleDrawer={toggleDrawer} drawerWidth={drawerWidth} />
                 <SearchWidget subOptions={subOptions} setSubOptions={setSubOptions} />
                 <TicketList subOptions={subOptions} />
             </Paper>
-            <LoginDialog open={openLogin} toggleOpen={toggleLogin} />
             </ThemeProvider>
         );
 };

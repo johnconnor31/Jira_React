@@ -28,7 +28,7 @@ const useStyles = makeStyles({
     }
 });
 export default function login(props){
-    const {open, toggleOpen} = props;
+    const {open, toggleOpen, requestToken} = props;
     const classes = useStyles();
     return (
         <Dialog open={open} onClose={toggleOpen(false)} classes={{paper: classes.paper}}>
@@ -46,7 +46,7 @@ export default function login(props){
                 <Button variant='contained'>Signup</Button>
                 <div className={classes.loginIcons}>
                     <IconButton><Facebook fontSize='large' className={classes.fb} /></IconButton>
-                    <IconButton><Twitter fontSize='large' className={classes.twitter} /></IconButton>
+                    <IconButton onClick={requestToken}><Twitter fontSize='large' className={classes.twitter} /></IconButton>
                     <IconButton><Reddit fontSize='large' className={classes.reddit} /></IconButton>
                 </div>
             </DialogContent>

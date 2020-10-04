@@ -27,6 +27,12 @@ module.exports = {
     devServer: {
         open: 'Firefox',
         compress: true,
-        port: 5000
+        port: 5000,
+        proxy: {
+            '/twitterLogin/**': {
+                target: 'http://localhost:3000',
+                secure: false
+            }
+        }
     }
 }

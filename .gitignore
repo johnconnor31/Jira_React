@@ -1,3 +1,3 @@
 node_modules
 runnables
-static/twitter keys.txt
+src/static/twitter_keys.json
