@@ -17,14 +17,23 @@ const useStyles = makeStyles(theme => ({
 
 export default function SearchWidget(props) {
     const styles = useStyles();
-    const [selectedOptions, setSelectedOptions] = React.useState([options[0]]);
     const { subOptions, setSubOptions } = props;
     const cloneSubOptions = values => {
         const subOptCopy = Object.assign([],values);
         setSubOptions(subOptCopy);
     }
-    function onChangeValues(e, values){
-        setSelectedOptions(values);
+    const selectedOptions = subOptions.map(subOpt => options.find(opt => opt.name === subOpt.name));
+    
+    function changeSelectedOptions(e, values) {
+        const subOptsClone = Object.assign([], subOptions);
+        if(subOptsClone.length>values.length) {
+            const removedOption = subOptsClone.findIndex(subOpt => !values.find(val => val.name===subOpt.name));
+            subOptsClone.splice(removedOption,1);
+        } else {
+            const addedOption = values.find(val => !subOptsClone.find(subOpt => val.name===subOpt.name));
+            subOptsClone.push({name: addedOption.name, values: addedOption.type !== 'Date' ? [] : new Date()});
+        }
+        setSubOptions(subOptsClone);
     }
     return (
         <Autocomplete
@@ -33,9 +42,9 @@ export default function SearchWidget(props) {
         multiple
         filterSelectedOptions
         options={options}
-        defaultValue={[options[0]]}
+        value={selectedOptions}
+        onChange={changeSelectedOptions}
         getOptionLabel = {o => o.name}
-        onChange={onChangeValues}
         renderInput={params => {
             return <TextField id='searchTextField' variant='outlined' {...params} />
         }}
@@ -86,6 +95,7 @@ function ChipWithTextBox(props) {
                             filterSelectedOptions
                             options = {optionsList}
                             onChange={changeValues(selectedOption.name)}
+                            value={subOptions[currentValID].values}
                             renderInput = {params => <TextField
                                                         {...params}
                                                         ref={textRef}
@@ -106,7 +116,7 @@ function ChipWithTextBox(props) {
                                     autoOk
                                     format="MM/dd/yyyy"
                                     animateYearScrolling
-                                    value={currentValID===-1 ? new Date() : subOptions[currentValID].values}
+                                    value={subOptions[currentValID].values}
                                     onChange={changeValues(selectedOption.name)}
                                     InputAdornmentProps={{
                                         position:'start'
@@ -119,12 +129,12 @@ function ChipWithTextBox(props) {
                                     }}
                                     />
                             </MuiPickersUtilsProvider>;
-    const childs = Object.assign([],[props.children[0],props.children[1],':',selectOptions,props.children[2]]);
+    const chipComponentWithTextBox = Object.assign([],[props.children[0],props.children[1],':',selectOptions,props.children[2]]);
 
     return (
         <>
         <div className={props.className} onClick={onTextClick} onKeyDown={onTextClick}>
-            {childs}
+            {chipComponentWithTextBox}
         </div>
         </>
     );

@@ -10,11 +10,11 @@ const drawerWidth = '240';
 const useStyles = makeStyles(theme => ({
     paperStyle: {
         minHeight:'98.2vh',
-        width: props => props.openDrawer ?  `calc(100%-${drawerWidth}px)` : `calc(100%)px` ,
+        width: props => props.openDrawer &&  `calc(100%-${drawerWidth}px)` ,
         marginLeft: props => props.openDrawer ? `${drawerWidth-5}px` : '65px',
         transition: props => theme.transitions.create(['width','margin'], {
             easing: theme.transitions.easing.sharp,
-            duration: props.openDrawer ? theme.transitions.duration.enteringScreen : theme.transitions.duration.leavingScreen
+            duration: props.openDrawer ? theme.transitions.duration.leavingScreen : theme.transitions.duration.leavingScreen
         })
     }
 }));
@@ -23,6 +23,27 @@ export default function App() {
     const [openDrawer, setOpenDrawer] = React.useState(false);
     const [mode, setMode] = React.useState('light');
     const [subOptions, setSubOptions] = React.useState([]);
+    function setFilter(filter) {
+        if(filter === 'Open Issues') {
+            setSubOptions([{
+                name: 'status',
+                values: ['Open']
+            }]);
+        } else if(filter === 'Assigned to Me') {
+            setSubOptions([{
+                name: 'Assignee',
+                values: ['Sairam Singireesu']
+            }]);
+        } else {
+            setSubOptions([{
+                    name: 'Assignee',
+                    values: ['Sairam Singireesu']
+                },{
+                name: 'Created Date',
+                values: new Date()
+            }]);
+        }
+    }
     const classes = useStyles({openDrawer});
     function toggleDrawer() {
         openDrawer ? setOpenDrawer(false): setOpenDrawer(true);
@@ -47,7 +68,7 @@ export default function App() {
     });
         return(
             <ThemeProvider theme={theme}>
-            <LeftSideMenu open={openDrawer} toggleDrawer={toggleDrawer} drawerWidth={drawerWidth} />
+            <LeftSideMenu open={openDrawer} toggleDrawer={toggleDrawer} drawerWidth={drawerWidth} setFilter={setFilter} />
             <Paper variant='outlined' className={classes.paperStyle}>
                 <Header switchMode={switchMode} toggleDrawer={toggleDrawer} drawerWidth={drawerWidth} />
                 <SearchWidget subOptions={subOptions} setSubOptions={setSubOptions} />

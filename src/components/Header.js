@@ -22,8 +22,8 @@ const useStyles = makeStyles((theme) =>({
 
 export default function Header(props) {
     const [openLogin, setOpenLogin] = React.useState(false);
-    const { switchMode, toggleDrawer } = props;
     const [userName, setUserName] = React.useState('');
+    const { switchMode, toggleDrawer } = props;
 
     function toggleLogin(open) {
         return () => setOpenLogin(open);
@@ -44,8 +44,10 @@ export default function Header(props) {
     }
     React.useEffect(() => {
         const searchParams = new URLSearchParams(window.location.search);
-        getUserName(searchParams);
-    });
+        if(searchParams){ 
+            getUserName(searchParams);
+        }
+    },[]);
     function getUserName(searchParams) {
         fetch('/twitterLogin/accessToken?'+searchParams).then(response => {
             console.log('resp', response);

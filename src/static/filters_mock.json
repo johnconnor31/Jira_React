@@ -27,7 +27,7 @@
     { "name": "Updated Date", 
            "type": "Date"
     },
-    { "name": "createdDate",
+    { "name": "Created Date",
         "type": "Date"
     }
 ]

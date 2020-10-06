@@ -1,14 +1,15 @@
 import React from 'react';
 import { Drawer, List, ListItem, ListItemIcon, ListItemText, Typography, Divider } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
-import { LockOpen, AssignmentInd, List as AllList, Link } from '@material-ui/icons';
+import { LockOpen, AssignmentInd, Today, Link } from '@material-ui/icons';
 
 const useStyles = makeStyles(theme => ({
     drawerOpen: {
+        overflowX: 'hidden',
         width: props =>  props.drawerWidth+'px',
         transition: theme.transitions.create(['width','margin'], {
             easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.enteringScreen
+            duration: theme.transitions.duration.leavingScreen
         })
     },
     drawerClose: {
@@ -31,19 +32,26 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function drawer(props) {
-    const { open, toggleDrawer } = props;
+    const { open, toggleDrawer, setFilter } = props;
+    const [selected, setSelected] = React.useState('');
     const classes = useStyles(props);
-    const menuOptions = ['Open Issues', 'Assigned to Me', 'All Issues'];
+    const menuOptions = ['Open Issues', 'Assigned to Me', 'Created Today'];
+    function filterSelect(filter) {
+        return () => {
+            setSelected(filter);
+            setFilter(filter);
+        }
+    }
     return (
         <Drawer open={open} variant='permanent' classes={{paper: open ? classes.drawerOpen : classes.drawerClose}}>
             <Typography onClick={toggleDrawer} className={classes.drawerHead}>{open ? 'Quick Links' : <Link />}</Typography>
             <Divider />
             <List>
                 {
-                menuOptions.map((val, i) => <ListItem button className={classes.drawerList}>
+                menuOptions.map((val, i) => <ListItem button selected={selected === val} className={classes.drawerList} onClick={filterSelect(val)}>
                     {i===0 && <ListItemIcon><LockOpen /></ListItemIcon>}
                     {i===1 && <ListItemIcon><AssignmentInd /></ListItemIcon>}
-                    {i===2 && <ListItemIcon><AllList /></ListItemIcon>}
+                    {i===2 && <ListItemIcon><Today /></ListItemIcon>}
                     {open && <ListItemText>
                         {val}
                     </ListItemText>
