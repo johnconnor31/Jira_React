@@ -1,6 +1,12 @@
 import React from 'react';
-import { Drawer, List, ListItem, ListItemIcon, ListItemText, Typography, Divider } from '@material-ui/core';
-import { makeStyles } from '@material-ui/styles';
+import Drawer from '@material-ui/core/Drawer';
+import List from '@material-ui/core/List';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListItem from '@material-ui/core/ListItem';
+import Typography from '@material-ui/core/Typography';
+import Divider from '@material-ui/core/Divider';
+import makeStyles from '@material-ui/styles/makeStyles';
 import { LockOpen, AssignmentInd, Today, Link } from '@material-ui/icons';
 
 const useStyles = makeStyles(theme => ({

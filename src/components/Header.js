@@ -1,7 +1,13 @@
 import React from 'react';
-import { AppBar, Toolbar, Button, IconButton,Typography, Switch } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import Typography from '@material-ui/core/Typography';
+import Switch from '@material-ui/core/Switch';
+import makeStyles from '@material-ui/core/styles/makeStyles';
 import MenuIcon from '@material-ui/icons/Menu';
+import Logout from '@material-ui/icons/PowerSettingsNew';
 import LoginDialog from './loginDialog.js';
 
 const useStyles = makeStyles((theme) =>({
@@ -22,6 +28,7 @@ const useStyles = makeStyles((theme) =>({
 
 export default function Header(props) {
     const [openLogin, setOpenLogin] = React.useState(false);
+    const [isLoggingIn, setIsLoggingIn ] = React.useState(false);
     const [userName, setUserName] = React.useState('');
     const { switchMode, toggleDrawer } = props;
 
@@ -41,15 +48,16 @@ export default function Header(props) {
                 console.log('error in response', response.statusText);
             }
         });
+        setIsLoggingIn(true);
     }
     React.useEffect(() => {
         const searchParams = new URLSearchParams(window.location.search);
-        if(searchParams){ 
+        if(searchParams.toString()){ 
             getUserName(searchParams);
         }
     },[]);
     function getUserName(searchParams) {
-        fetch('/twitterLogin/accessToken?'+searchParams).then(response => {
+        fetch('/twitterLogin/accessToken?'+searchParams.toString()).then(response => {
             console.log('resp', response);
             if(response.status===200) {
                 response.text().then(resText => {
@@ -60,7 +68,9 @@ export default function Header(props) {
                     window.history.pushState('Jira','', '/');
                 })
             }
+            setIsLoggingIn(false);
         });
+        setIsLoggingIn(true);
     }
     
     const styles = useStyles();
@@ -76,11 +86,11 @@ export default function Header(props) {
                     <Switch onChange={switchMode} />
                     {userName && <Typography>Welcome {userName}</Typography>}  
                     {
-                       userName ? <Button color='inherit' variant='outlined' onClick={()=> setUserName('')}>Logout</Button> :
-                                <Button color='inherit' variant='outlined' onClick={toggleLogin(true)}>Login</Button>
+                       userName ? <IconButton onClick={()=> setUserName('')}><Logout /></IconButton> :
+                                <Button color='inherit' variant='outlined' onClick={toggleLogin(true)}>{ isLoggingIn ? 'Logging you in...':'Login'}</Button>
                     }
                 </Toolbar>
-                <LoginDialog open={openLogin} toggleOpen={toggleLogin} requestToken={requestToken} />
+                <LoginDialog open={openLogin} toggleOpen={toggleLogin} isLoggingIn={isLoggingIn} requestToken={requestToken} />
             </AppBar>
     );
 }

@@ -1,11 +1,12 @@
 import React from 'react';
-import { Dialog, DialogTitle,TextField, DialogContent, Button, IconButton } from '@material-ui/core';
+import { Dialog, DialogTitle,TextField, DialogContent, Button, IconButton, CircularProgress } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import { Facebook, Twitter, Reddit } from '@material-ui/icons';
 
 const useStyles = makeStyles({
     paper: {
         width: '40%',
+        minHeight: '20%',
         display:'flex',
         alignItems:'center'
     },
@@ -28,10 +29,12 @@ const useStyles = makeStyles({
     }
 });
 export default function login(props){
-    const {open, toggleOpen, requestToken} = props;
+    const {open, toggleOpen, isLoggingIn, requestToken} = props;
     const classes = useStyles();
     return (
         <Dialog open={open} onClose={toggleOpen(false)} classes={{paper: classes.paper}}>
+            {isLoggingIn ? <CircularProgress style={{margin:'auto'}} /> 
+            : <>
             <DialogTitle>Login</DialogTitle>
             <DialogContent className={classes.dialogContent}>
                 <TextField
@@ -50,6 +53,7 @@ export default function login(props){
                     <IconButton><Reddit fontSize='large' className={classes.reddit} /></IconButton>
                 </div>
             </DialogContent>
+            </>}
         </Dialog>
     );
 }
