@@ -36,20 +36,6 @@ export default function Header(props) {
         return () => setOpenLogin(open);
     }
 
-    function requestToken() {
-        fetch('/twitterLogin/requestToken').then((response) => {
-            console.log('response is', response);
-            if(response.status===200) {
-                response.text().then(resText =>{
-                console.log('parsed resp', resText);
-                window.location.replace(`https://api.twitter.com/oauth/authenticate?${resText}`);
-                });
-            } else {
-                console.log('error in response', response.statusText);
-            }
-        });
-        setIsLoggingIn(true);
-    }
     React.useEffect(() => {
         const searchParams = new URLSearchParams(window.location.search);
         if(searchParams.toString()){ 
@@ -68,9 +54,7 @@ export default function Header(props) {
                     window.history.pushState('Jira','', '/');
                 })
             }
-            setIsLoggingIn(false);
         });
-        setIsLoggingIn(true);
     }
     
     const styles = useStyles();
@@ -90,7 +74,7 @@ export default function Header(props) {
                                 <Button color='inherit' variant='outlined' onClick={toggleLogin(true)}>{ isLoggingIn ? 'Logging you in...':'Login'}</Button>
                     }
                 </Toolbar>
-                <LoginDialog open={openLogin} toggleOpen={toggleLogin} isLoggingIn={isLoggingIn} requestToken={requestToken} />
+                <LoginDialog open={openLogin} toggleOpen={toggleLogin} />
             </AppBar>
     );
 }
