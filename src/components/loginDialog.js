@@ -33,6 +33,12 @@ export default function login(props){
     const [isProcessing, toggleProcessing] = React.useState(false);
     const [loginFailure, toggleLoginFailure] = React.useState(false);
     const [isSignup, toggleSignup] = React.useState(false);
+    const [values,setValues] = React.useState({
+        userName: '',
+        email: '',
+        password: ''
+    });
+    const [errors, setErrors] = React.useState({});
     const classes = useStyles();
     const login = (type) => () => {
         if(type==='Twitter') {
@@ -59,40 +65,83 @@ export default function login(props){
         toggleProcessing(false);
         toggleSignup(false);
     }
-    function singUp() {
-
+    function signUp() {
+        const hasErrors = checkErrors();
+        if(!hasErrors) {
+            fetch('myServer/signUp');
+        }
+    }
+    const changeValue = fieldName => (e) => {
+        const currentValues = Object.assign({},values);
+        currentValues[fieldName] = e.target.value;
+        setValues(currentValues);
+    }
+    function checkErrors(){
+        const currentErrors = Object.assign({}, errors);
+        for(const key in values) {
+            if(!values[key]) {
+                currentErrors[key] = 'Please enter '+key;
+            } else {
+                delete currentErrors[key];
+            }
+        }
+        console.log('checking errors', errors);
+        setErrors(currentErrors);
+        return errors!=={};
     }
 
+    function backToLogin(){
+        toggleSignup(false);
+        setErrors({});
+        setValues({
+            userName: '',
+            email: '',
+            password: ''
+        })
+    }
+    
     return (
         <Dialog open={open} onClose={toggleOpen(false)} onExited={resetForm} classes={{paper: classes.paper}}>
             {isProcessing ? loginFailure ? <Typography style={{margin:'auto'}}>Login Failed</Typography> : <CircularProgress style={{margin:'auto'}} /> 
             : <>
             <div style={{display:'flex', width: '100%', justifyContent:'center'}}>
-            {isSignup && <IconButton style={{left:'-35%'}} onClick={() => toggleSignup(false)}><ArrowBackIos /></IconButton>}
+            {isSignup && <IconButton style={{left:'-35%'}} onClick={backToLogin}><ArrowBackIos /></IconButton>}
             <DialogTitle>Login</DialogTitle>
             </div>
             <DialogContent className={classes.dialogContent}>
                 <TextField
                 fullWidth
                 variant='outlined'
-                label='User Name' />
+                label='User Name'
+                helperText={errors['userName']}
+                error={errors['userName']}
+                value={values.userName}
+                onChange={changeValue('userName')} />
                 {isSignup && 
                 <TextField
                 fullWidth
                 variant='outlined'
-                label='Email' />
+                label='Email'
+                helperText={errors['email']}
+                error={errors['email']}
+                value={values.email}
+                onChange={changeValue('email')} />
                 }
                 <TextField
                 fullWidth
                 variant='outlined'
                 type='Password'
-                label='Password' />
+                label='Password'
+                helperText={errors['password']}
+                error={errors['password']}
+                value={values.password}
+                onChange={changeValue('password')} />
                 {!isSignup ?
                 <>
                     <Button variant='contained' color='primary'>Login</Button>
                     <Button variant='contained' onClick={() => toggleSignup(true)}>Signup</Button>
                 </> : 
-                    <Button variant='contained' color='primary' onClick={singUp}>Sign Me UP!</Button>
+                    <Button variant='contained' color='primary' onClick={signUp}>Sign Me UP!</Button>
                 }
                 <div className={classes.loginIcons}>
                     <IconButton><Facebook fontSize='large' className={classes.fb} /></IconButton>
