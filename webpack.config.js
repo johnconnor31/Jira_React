@@ -29,7 +29,7 @@ module.exports = {
         compress: true,
         port: 5000,
         proxy: {
-            '/twitterLogin/**': {
+            '/myServer/*/*': {
                 target: 'http://localhost:3000',
                 secure: false
             }

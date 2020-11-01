@@ -46,7 +46,7 @@ export default function login(props){
         }
     }
     function requestToken() {
-        fetch('/twitterLogin/requestToken').then((response) => {
+        fetch('/myServer/twitterLogin/requestToken').then((response) => {
             console.log('response is', response);
             if(response.status===200) {
                 response.text().then(resText =>{
@@ -68,7 +68,29 @@ export default function login(props){
     function signUp() {
         const hasErrors = checkErrors();
         if(!hasErrors) {
-            fetch('myServer/signUp');
+            console.log('has errors', hasErrors);
+            fetch('/myServer/signUp',
+            {
+                method:'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(values)
+            }).then( response => {
+                if(response.status === 422) {
+                    response.json().then( err => {
+                        console.log('error response is', err);
+                        const currentErrors = {};
+                        currentErrors[err.fieldName] = `That ${err.fieldName} already exists.`;
+                        setErrors(currentErrors);
+                    })
+                } else {
+                    if(response.status === 200) {
+                        backToLogin();
+                    }
+                }
+            }).catch( error => console.log('error posting', error));
         }
     }
     const changeValue = fieldName => (e) => {
@@ -87,7 +109,7 @@ export default function login(props){
         }
         console.log('checking errors', errors);
         setErrors(currentErrors);
-        return errors!=={};
+        return Object.keys(currentErrors).length;
     }
 
     function backToLogin(){

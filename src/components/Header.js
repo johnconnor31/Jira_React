@@ -43,7 +43,7 @@ export default function Header(props) {
         }
     },[]);
     function getUserName(searchParams) {
-        fetch('/twitterLogin/accessToken?'+searchParams.toString()).then(response => {
+        fetch('/myServer/twitterLogin/accessToken?'+searchParams.toString()).then(response => {
             console.log('resp', response);
             if(response.status===200) {
                 response.text().then(resText => {
