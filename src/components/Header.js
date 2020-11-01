@@ -74,7 +74,7 @@ export default function Header(props) {
                                 <Button color='inherit' variant='outlined' onClick={toggleLogin(true)}>{ isLoggingIn ? 'Logging you in...':'Login'}</Button>
                     }
                 </Toolbar>
-                <LoginDialog open={openLogin} toggleOpen={toggleLogin} />
+                <LoginDialog open={openLogin} toggleOpen={toggleLogin} setUserName={setUserName} />
             </AppBar>
     );
 }

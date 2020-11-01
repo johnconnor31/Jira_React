@@ -6,6 +6,9 @@ const keys = require('./auth_keys.json');
 
 const app = express();
 
+const url = `mongodb+srv://${keys.mongo_userId}:${keys.mongo_pwd}@cluster0.gw3ak.mongodb.net`;
+const client = new MongoClient(url);
+
 app.get('/myServer/twitterLogin/requestToken', (req, res) => {
     console.log('requesting token')
     const url = 'https://api.twitter.com/oauth/request_token';
@@ -51,8 +54,6 @@ app.post('/myServer/signUp',bodyParser.json(), async (req,res) => {
     const body = req.body;
     if(body) {
         const { userName, email, password } = body;
-        const url = `mongodb+srv://${keys.mongo_userId}:${keys.mongo_pwd}@cluster0.gw3ak.mongodb.net`;
-        const client = new MongoClient(url);
         await client.connect();
         const users = await client.db('Jira').collection('Users');
         console.log('DB Connected');
@@ -80,6 +81,27 @@ app.post('/myServer/signUp',bodyParser.json(), async (req,res) => {
     }
 
 });
+
+app.post('/myServer/login',bodyParser.json(), async (req,res) => {
+    console.log('login body',req.url, req.query, req.body);
+    const body = req.body;
+    if(body) {
+        const { userName, password } = body;
+        await client.connect();
+        const users = await client.db('Jira').collection('Users');
+        console.log('DB Connected');
+        const existsUser = await users.findOne({ _id: userName, password });
+        if(existsUser) {
+            console.log('exists user', existsUser);
+            res.status(200).send(existsUser);
+        } else {
+            console.log('login failure');
+            res.status(404).send();
+        }
+    }
+
+});
+
 
 app.listen(3000, () => {
     console.log('running on port 3000');

@@ -29,7 +29,7 @@ const useStyles = makeStyles({
     }
 });
 export default function login(props){
-    const {open, toggleOpen} = props;
+    const {open, toggleOpen, setUserName} = props;
     const [isProcessing, toggleProcessing] = React.useState(false);
     const [loginFailure, toggleLoginFailure] = React.useState(false);
     const [isSignup, toggleSignup] = React.useState(false);
@@ -63,12 +63,40 @@ export default function login(props){
     function resetForm() {
         toggleLoginFailure(false);
         toggleProcessing(false);
-        toggleSignup(false);
+        backToLogin();
+    }
+    function normalLogin() {
+        const hasErrors = checkErrors('login');
+        if(!hasErrors) {
+            console.log('logging in');
+            fetch('/myServer/login', 
+            {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(values)
+            }).then( response => {
+                if( response.status === 404 ) {
+                        console.log('Error logging in');
+                        setErrors({
+                            userName: 'There was an error logging in'
+                        });
+                } else {
+                    response.json().then(res => {
+                        console.log('user found', res);
+                        resetForm();
+                        toggleOpen(false)();
+                        setUserName(res._id);
+                    })
+                }
+            })
+        }
     }
     function signUp() {
         const hasErrors = checkErrors();
         if(!hasErrors) {
-            console.log('has errors', hasErrors);
             fetch('/myServer/signUp',
             {
                 method:'POST',
@@ -98,10 +126,11 @@ export default function login(props){
         currentValues[fieldName] = e.target.value;
         setValues(currentValues);
     }
-    function checkErrors(){
+    function checkErrors(login){
         const currentErrors = Object.assign({}, errors);
         for(const key in values) {
             if(!values[key]) {
+                if(!login || key!=='email' )
                 currentErrors[key] = 'Please enter '+key;
             } else {
                 delete currentErrors[key];
@@ -160,7 +189,7 @@ export default function login(props){
                 onChange={changeValue('password')} />
                 {!isSignup ?
                 <>
-                    <Button variant='contained' color='primary'>Login</Button>
+                    <Button variant='contained' color='primary' onClick={normalLogin}>Login</Button>
                     <Button variant='contained' onClick={() => toggleSignup(true)}>Signup</Button>
                 </> : 
                     <Button variant='contained' color='primary' onClick={signUp}>Sign Me UP!</Button>
